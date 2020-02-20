@@ -1,6 +1,9 @@
 {
-  "posts": [
-    { "id": 1, "title": "json-server", "author": "typicode" }
+  "stations": [
+    { "id": 1, "name": "Станция №1", "address": "г. Томск ул. Учебная №10" },
+    { "id": 2, "name": "Станция №2 Gas", "address": "г. Москва ул. Учебная №10" },
+    { "id": 3, "name": "Станция №3 Lukoil", "address": "г. Новосибирск ул. Усова №1" },
+    { "id": 4, "name": "Станция №4 Gazprom", "address": "г. Омск ул. Иванова №55" }
   ],
   "comments": [
     { "id": 1, "body": "some comment", "postId": 1 }
