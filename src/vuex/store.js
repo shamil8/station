@@ -1,34 +1,52 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
+
+import mutationsStation from './mutations/station'
+import mutationsCar from './mutations/car'
+import mutationsCarStation from './mutations/car-station'
+
+import actionStation from './actions/station'
+import actionCar from './actions/car'
+import actionCarStation from './actions/car-station'
+
+import gettersStation from './getters/station'
+import gettersCar from './getters/car'
+import gettersCarStation from './getters/car-station'
+
 Vue.use(Vuex)
-let store = new Vuex.Store({
+const station = {
     state: {
         stations: [],
-        cars: []
+        station: {},
+        newStation: {},
     },
-    mutations: {
-        SET_STATIONS_TO_STATE: (state, stations) => {
-            state.stations = stations
-        }
+    mutations: mutationsStation,
+    actions: actionStation,
+    getters: gettersStation
+}
+const car = {
+    state: {
+        cars: [],
+        car: {},
+        newCar: {},
     },
-    actions: {
-        GET_STATIONS_FROM_API({commit}) {
-            let url = 'http://localhost:3000/stations'
-            return axios.get(url)
-                .then((stations) => {
-                    commit('SET_STATIONS_TO_STATE', stations.data)
-                    return stations
-                })
-                .catch( (error) => {
-                    console.log(error)
-                })
-        }
+    mutations: mutationsCar,
+    actions: actionCar,
+    getters: gettersCar
+}
+const carStation = {
+    state: {
+        carStation: [],
     },
-    getters: {
-        STATIONS(state){
-            return state.stations
-        }
+    mutations: mutationsCarStation,
+    actions: actionCarStation,
+    getters: gettersCarStation
+}
+let store = new Vuex.Store({
+    modules: {
+        station,
+        car,
+        carStation
     }
 })
 

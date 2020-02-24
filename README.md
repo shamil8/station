@@ -47,3 +47,11 @@ yarn lint
 ```
 json-server --watch db.json
 ```
+
+I used the Element UI components:
+```
+e-card,
+e-icon,
+e-nav-menu,
+e-table,
+```

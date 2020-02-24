@@ -1,4 +1,10 @@
 @import "./variables";
+
+*{
+  padding: 0;
+  margin: 0;
+}
 body {
-  color: $main-color;
+  color: $black-color;
+  background: $bg-color;
 }
