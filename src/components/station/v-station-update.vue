@@ -8,7 +8,9 @@
                 <el-date-picker
                         v-model="station.date"
                         type="date"
-                        placeholder="Дата открытия">
+                        placeholder="Дата открытия"
+                        :picker-options="pickerOptions"
+                >
                 </el-date-picker>
             </div>
         </div>
@@ -16,8 +18,27 @@
                 :img="station.img"
                 @image="newImage"
         />
-        <el-button v-if="$route.name === 'stationNew'" @click="updateStation" class="v-station-update__submit" type="success" round>Создать</el-button>
-        <el-button v-else @click="updateStation" class="v-station-update__submit" type="primary" round>Сохранить</el-button>
+
+        <el-button
+                v-if="$route.name === 'stationNew'"
+                :loading="loadingBtn"
+                @click="updateStation"
+                class="v-station-update__submit"
+                type="success"
+                round
+        >
+            Создать
+        </el-button>
+        <el-button
+                v-else
+                @click="updateStation"
+                :loading="loadingBtn"
+                class="v-station-update__submit"
+                type="primary"
+                round
+        >
+            Сохранить
+        </el-button>
     </el-card>
 </template>
 
@@ -28,7 +49,14 @@
     export default {
         name: "v-station-update",
         data() {
-            return {}
+            return {
+                loadingBtn: false,
+                pickerOptions: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    }
+                },
+            }
         },
         computed: {
             station() {
@@ -45,14 +73,17 @@
                 // this.newImgArea = image
             },
             updateStation() {
+                this.loadingBtn = true
                 if (this.station.id)
                     this.UPDATE_STATION(this.station)
                         .then(res => {
+                            this.loadingBtn = false
                             this.$router.push({name: 'stationShow', params: {id: res.data.id}})
                         })
                 else   // Create station
                     this.POST_STATION(this.station)
                         .then(res => {
+                            this.loadingBtn = false
                             this.$router.push({name: 'stationShow', params: {id: res.data.id}})
                         })
             }

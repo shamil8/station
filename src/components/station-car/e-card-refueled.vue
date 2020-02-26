@@ -14,7 +14,7 @@
                     v-for="car in CARS"
                     :key="car.id"
                     :label="car.number"
-                    :value="car.number"
+                    :value="car.id"
             >
             </el-option>
         </el-select>
@@ -27,7 +27,16 @@
                 :picker-options="pickerOptions"
         >
         </el-date-picker>
-        <el-button @click="add" class="e-card-refueled__submit" type="primary" round>Добавить</el-button>
+        <el-button
+                @click="add"
+                :loading="loadingBtn"
+                v-loading.fullscreen.lock="fullscreenLoading"
+                class="e-card-refueled__submit"
+                type="primary"
+                round
+        >
+            Добавить
+        </el-button>
     </el-card>
 </template>
 
@@ -43,7 +52,9 @@
                         return time.getTime() > Date.now();
                     }
                 },
-                carStation: {}
+                carStation: {},
+                fullscreenLoading: true,
+                loadingBtn: false
             }
         },
         computed: {
@@ -60,10 +71,13 @@
                 'POST_CAR_STATION'
             ]),
             add() {
+                this.loadingBtn = true
                 this.POST_CAR_STATION(this.carStation)
                     .then(() => {
+                        this.loadingBtn = false
                         this.carStation = {}
                     })
+                    .catch(() => this.loadingBtn = false)
             }
         },
         mounted() {

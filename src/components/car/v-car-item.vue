@@ -5,7 +5,10 @@
                 <router-link class="action__edit" :to="{name: 'carUpdate', params: {id: car.id}}">
                     <i class="el-icon-edit-outline"/>
                 </router-link>
-                <span @click="$emit('removeCar')" class="action__delete"><i class="el-icon-delete"/></span>
+                <span @click="$emit('removeCar')" class="action__delete">
+                    <i v-if="index !== loading" class="el-icon-delete"/>
+                    <i v-else class="el-icon-loading"/>
+                </span>
             </div>
             <img
                     v-if="car.img !== undefined"
@@ -27,7 +30,9 @@
     export default {
         name: "v-car-item",
         props: {
-            car: Object
+            car: Object,
+            loading: Number,
+            index: Number
         }
     }
 </script>

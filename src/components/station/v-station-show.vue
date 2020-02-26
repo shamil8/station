@@ -5,7 +5,7 @@
             <p class="info__company">Компания: {{station.company}} </p>
             <p class="info__address">Адрес: {{station.address}}</p>
             <p class="info__date">Дата открытия: {{ typeof station.date === 'object'
-                ? station.date.toLocaleDateString('ru-RU'): station.date }}</p>
+                ? station.date.toLocaleDateString('ru-RU').substring(0, 10) : station.date.substring(0, 10)  }}</p>
 
             <div class="info__action">
                 <router-link class="action__edit" :to="{name: 'stationUpdate', params: {id: station.id}}">

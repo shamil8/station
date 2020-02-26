@@ -11,6 +11,8 @@
                 v-for="(station, index) in STATIONS"
                 :key="station.id"
                 :station="station"
+                :index="index"
+                :loading="loading"
                 @removeStation="removeStation(index, station.id)"
         />
         <el-dialog
@@ -35,7 +37,8 @@
                 fullscreenLoading: true,
                 centerDialogVisible: false,
                 stationIndex: null,
-                stationId: null
+                stationId: null,
+                loading: -1
             }
         },
         computed: {
@@ -55,11 +58,13 @@
             },
             removeStationDialog() {
                 this.centerDialogVisible = false
+                this.loading = this.stationIndex
                 this.DELETE_STATION([this.stationIndex, this.stationId], )
+                    .then(() => this.loading = -1)
             },
         },
         mounted() {
-            this.GET_STATIONS()
+            this.GET_STATIONS(2)
                 .then(res => {
                     if (res.data) this.fullscreenLoading = false
                 })

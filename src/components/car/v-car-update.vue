@@ -13,7 +13,15 @@
                 :img="car.img"
                 @image="newImage"
         />
-        <el-button @click="updateCar" class="v-car-update__submit" type="primary" round>Сохранить</el-button>
+        <el-button
+                @click="updateCar"
+                :loading="loadingBtn"
+                class="v-car-update__submit"
+                type="primary"
+                round
+        >
+            {{ $route.name === 'carNew' ? "Создать" : "Сохранить" }}
+        </el-button>
     </el-card>
 </template>
 
@@ -24,7 +32,9 @@
     export default {
         name: "v-car-update",
         data() {
-            return {}
+            return {
+                loadingBtn: false
+            }
         },
         computed: {
             car() {
@@ -41,15 +51,18 @@
                 // this.newImgArea = image
             },
             updateCar() {
+                this.loadingBtn = true
                 if (this.car.id)
                     this.UPDATE_CAR(this.car)
                         .then(res => {
+                            this.loadingBtn = false
                             this.$router.push({name: 'carShow', params: {id: res.data.id}})
                         })
 
                 else   // Create car
                     this.POST_CAR(this.car)
                         .then(res => {
+                            this.loadingBtn = false
                             this.$router.push({name: 'carShow', params: {id: res.data.id}})
                         })
             }

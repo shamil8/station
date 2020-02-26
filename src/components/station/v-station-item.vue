@@ -4,7 +4,10 @@
             <router-link class="action__edit" :to="{name: 'stationUpdate', params: {id: station.id}}">
                 <i class="el-icon-edit-outline"/>
             </router-link>
-            <span @click="$emit('removeStation')" class="action__delete"><i class="el-icon-delete"/></span>
+            <span @click="$emit('removeStation')" class="action__delete">
+                <i v-if="index !== loading" class="el-icon-delete"/>
+                <i v-else class="el-icon-loading"/>
+            </span>
         </div>
             <img v-if="station.img !== undefined" class="v-station-item__image" :src="'/uploads/images/'+ station.img" alt="Img">
         <div class="v-station-item__info">
@@ -20,7 +23,9 @@
     export default {
         name: "v-station-item",
         props: {
-            station: Object
+            station: Object,
+            loading: Number,
+            index: Number
         }
     }
 </script>

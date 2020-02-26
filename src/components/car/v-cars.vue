@@ -11,6 +11,8 @@
                 v-for="(car, index) in CARS"
                 :key="car.id"
                 :car="car"
+                :index="index"
+                :loading="loading"
                 @removeCar="removeCar(index, car.id)"
         />
         <el-dialog
@@ -35,7 +37,8 @@
                 fullscreenLoading: true,
                 centerDialogVisible: false,
                 carIndex: null,
-                carId: null
+                carId: null,
+                loading: -1
             }
         },
         computed: {
@@ -55,7 +58,9 @@
             },
             removeCarDialog() {
                 this.centerDialogVisible = false
+                this.loading = this.carIndex
                 this.DELETE_CAR([this.carIndex, this.carId], )
+                    .then(() => this.loading = -1)
             },
         },
         mounted() {

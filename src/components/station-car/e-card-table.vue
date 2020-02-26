@@ -2,6 +2,7 @@
     <el-card class="e-card-table" :body-style="{ padding: '0px' }">
         <h2 class="e-card-table__title">Недавно заправленные машины</h2>
         <el-table
+                v-loading="loading"
                 class="e-card-table__table"
                 :data="CAR_STATION"
                 style="width: 100%"
@@ -54,7 +55,8 @@
                 class="e-card-table__pagination"
                 background
                 layout="prev, pager, next"
-                :total="100"
+                :total="total"
+                :page-size="pageSize"
                 @current-change="changePagination"
         />
     </el-card>
@@ -65,7 +67,11 @@
     export default {
         name: "e-card-table",
         data() {
-            return {}
+            return {
+                loading: false,
+                total: 1,
+                pageSize: 3
+            }
         },
         computed: {
           ...mapGetters([
@@ -84,13 +90,19 @@
                 return row[property] === value;
             },
             changePagination(page) {
-                console.log('Axios get page: ' + page)
+                this.loading = true
+                this.GET_CAR_STATION(page)
+                    .then(res => {
+                        this.total = res.data.total
+                        this.loading = false
+                    })
+                    .catch(() => this.loading = true)
             }
         },
         mounted() {
             this.GET_CAR_STATION()
-                .then(() => {
-
+                .then(res => {
+                    this.total = res.data.total
                 })
         }
     }
