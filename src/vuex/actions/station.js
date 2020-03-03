@@ -2,7 +2,7 @@ import axios from "axios"
 
 let db = 0 // 0- it's fake api (json-server) || 1 - Symfony API
 
-const url = db ? 'https://127.0.0.1:8000/api/stations' : 'http://localhost:3000/stations'
+const url = db ? 'https://127.0.0.1:8000/api/stations' : 'https://json-server.adib.now.sh/stations'
 
 export default {
     GET_STATIONS({commit}) {
