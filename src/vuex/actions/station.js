@@ -1,13 +1,14 @@
 import axios from "axios"
 
-const url = 'https://127.0.0.1:8000/api/stations'
-// const url = 'http://localhost:3000/api/stations'
+let db = 0 // 0- it's fake api (json-server) || 1 - Symfony API
+
+const url = db ? 'https://127.0.0.1:8000/api/stations' : 'http://localhost:3000/stations'
 
 export default {
     GET_STATIONS({commit}) {
         return axios.get(url + '?isDelete=false')
             .then((res) => {
-                commit('SET_STATIONS', res.data['hydra:member'])
+                commit('SET_STATIONS', db ? res.data['hydra:member'] : res.data)
                 return res
             })
             .catch( error => console.log(error) )
@@ -20,6 +21,7 @@ export default {
             })
     },
     POST_STATION({commit}, station) {
+        station.isDelete = false
         return axios.post(url, station)
             .then((res) => {
                 commit('ADD_STATION', res.data)
@@ -29,28 +31,32 @@ export default {
     },
     UPDATE_STATION({commit}, station) {
         let  id = '/' + station.id
-        return axios.patch(url + id, station,{
-            headers: {
-                'Content-Type': 'application/merge-patch+json'
-            }
-        })
-            .then((res) => {
-                commit('UPDATE_STATION', res.data)
-                return res
+        return db
+            ? axios.patch(url + id, station, {
+                headers: {
+                    'Content-Type': 'application/merge-patch+json'
+                }
             })
-            .catch( error => console.log(error) )
+            : axios.put(url + id, station)
+                .then((res) => {
+                    commit('UPDATE_STATION', res.data)
+                    return res
+                })
+                .catch( error => console.log(error) )
     },
     DELETE_STATION({commit}, [index, id]) {
         let  idDel = '/' + id
-        return axios.patch(url + idDel,{"isDelete": true}, {
-            headers: {
-                'Content-Type': 'application/merge-patch+json'
-            }
-        })
-            .then((res) => {
-                commit('DELETE_STATION', index)
-                return res
+        return db
+            ? axios.patch(url + idDel, {"isDelete": true}, {
+                headers: {
+                    'Content-Type': 'application/merge-patch+json'
+                }
             })
-            .catch( error => console.log(error) )
+            : axios.put(url + idDel, {"isDelete": true})
+                .then((res) => {
+                    commit('DELETE_STATION', index)
+                    return res
+                })
+                .catch( error => console.log(error) )
     },
 }
